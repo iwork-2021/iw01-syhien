@@ -250,7 +250,7 @@ var operations = [
 
 此处的阶乘$x!$使用了比较无脑的方法，预先计算好结果在表示范围内的计算结果，超过表示范围则返回$-1$
 
-最后，暴露一个`performOperation`方法以供`ViewController`调用：
+最后，提供一个`performOperation`方法以供`ViewController`调用：
 
 ```swift
 func performOperation (operation: String, operand: Double) -> Double? {
