@@ -86,8 +86,8 @@ class Calculator: NSObject {
         "π": Operations.Constant(Double.pi),
         "mr": Operations.MemoryOperation,
         "mc": Operations.MemoryOperation,
-        "m+": Operations.BinaryOperation { $0 + memorizedResult },
-        "m-": Operations.BinaryOperation { $0 - memorizedResult }
+        "m+": Operations.MemoryOperation,
+        "m-": Operations.MemoryOperation
     ]
     
    
@@ -107,8 +107,16 @@ class Calculator: NSObject {
                 switch operation {
                 case "mr":
                     memorizedResult = operand
+                    return memorizedResult
                 case "mc":
                     memorizedResult = 0.0
+                    return memorizedResult
+                case "m+":
+                    return memorizedResult + operand
+                case "m-":
+                    return memorizedResult - operand
+                default:
+                    return nil
                 }
             }
         }

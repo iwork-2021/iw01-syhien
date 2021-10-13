@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        resultDisplay.text = ""
+        resultDisplay.text = "0.0"
     }
 
     var typingNow = false
