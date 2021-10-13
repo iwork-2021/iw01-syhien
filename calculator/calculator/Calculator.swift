@@ -13,6 +13,7 @@ class Calculator: NSObject {
         case BinaryOperation((Double,Double)->Double)
         case EqualOperation
         case Constant(Double)
+        case MemoryOperation
     }
     
     struct Intermediate {
@@ -20,6 +21,7 @@ class Calculator: NSObject {
         var waitingOperation: (Double, Double)->Double
     }
     var pendingOperation: Intermediate? = nil
+    var memorizedResult = 0.0
  
     var operations = [
         "+": Operations.BinaryOperation { $0 + $1 },
@@ -81,7 +83,11 @@ class Calculator: NSObject {
         "sinh": Operations.UnaryOperation { sinh($0) },
         "cosh": Operations.UnaryOperation { cosh($0) },
         "tanh": Operations.UnaryOperation { tanh($0) },
-        "π": Operations.Constant(Double.pi)
+        "π": Operations.Constant(Double.pi),
+        "mr": Operations.MemoryOperation,
+        "mc": Operations.MemoryOperation,
+        "m+": Operations.BinaryOperation { $0 + memorizedResult },
+        "m-": Operations.BinaryOperation { $0 - memorizedResult }
     ]
     
    
@@ -97,6 +103,13 @@ class Calculator: NSObject {
                 return pendingOperation?.waitingOperation(pendingOperation!.firstOperand, operand)
             case .UnaryOperation(let function):
                 return function(operand)
+            case .MemoryOperation:
+                switch operation {
+                case "mr":
+                    memorizedResult = operand
+                case "mc":
+                    memorizedResult = 0.0
+                }
             }
         }
         return nil
