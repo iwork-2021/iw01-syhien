@@ -73,9 +73,11 @@
 
 对于`textView`中的`label`，使用了几条constraints来控制布局：
 
+![lable_constraints](images/label_constraints.png)
+
 1. 居中
-2. 宽度为`textView`的  倍
-3. 底部到`textView`的底部距离恒为
+2. 宽度为`textView`的0.9倍
+3. 底部到`textView`的底部距离恒为15
 
 即呈现出如项目展示部分中运算结果的显示效果
 
