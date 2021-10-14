@@ -349,7 +349,15 @@ func performOperation (operation: String, operand: Double) -> Double? {
 
 ## 项目难点
 
+1. 不同设备的横屏竖屏`size class`不同
 
+项目最初开发时，为横屏设置的`constraints`为`Regular width, Compact height`，在iPhone 11测试正常
+
+但是在一些比较老旧的iPhone设备上横屏时`size class`为`Compact width, Compact height`，此时`constraints`无法生效
+
+通过观察各设备的`size class`，我选择的解决方案为只根据`height`判定横竖屏：`Any width, Regular height`视为竖屏，`Any width, Compact height`视为横屏
+
+解决方案的实际表现不错，在各设备上基本都正确实现了横屏、竖屏
 
 
 
