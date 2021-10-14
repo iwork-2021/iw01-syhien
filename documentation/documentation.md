@@ -6,6 +6,14 @@
 
 
 
+## 项目展示
+
+![portrait](./images/portrait.png)
+
+![landscape](./images/landscape.png)
+
+
+
 ## 项目需求
 
 - GUI
@@ -30,15 +38,54 @@
 
 本节将按照MVC架构对项目进行说明
 
+
+
 ### Main.storyboard 视图
 
+项目的视图布局基于以下原则：
 
+1. 尽量使用`Stack View`组织视图
+2. 使用`Constraints`进行**相对的**布局控制
+
+
+
+无论是横屏还是竖屏，展示运算过程及运算结果的`textView`都位于所有操作按键`allButtomView`的上方；`textView`或`allButtomView`在竖屏或横屏时高度占比不同。基于以上，则有：
+
+![orientation_constrains](images/orientation_constrains.png)
+
+如图，此时横屏下激活了两个constraints，将`textView`的高度设为上层`Stack View`的0.2倍，将`allButtomView`的高度设为上层`Stack View`的0.8倍；类似地，竖屏时的两个constraints将高度设为0.3和0.7倍
+
+
+
+在`allButtomView`中，`extraButtomView`表示横屏时额外的操作按键，意味着`extraButtomView`应该也仅应该在横屏下显示，项目通过为`extraButtomView`设置constraints实现：
+
+![extraButtomViewConstraints](images/extraButtomViewConstraints.png)
+
+
+
+下面以其中一个`buttom`来窥探结构：
+
+![buttom_structure_edited](images/buttom_structure_edited.jpg)
+
+此处，对纵向摆放的`Stack View`设置`Fill equally`即实现每个行等高；对横行摆放的`Stack View`也设置`Fill equally`即实现每个按钮等宽
+
+
+
+对于`textView`中的`label`，使用了几条constraints来控制布局：
+
+1. 居中
+2. 宽度为`textView`的  倍
+3. 底部到`textView`的底部距离恒为
+
+即呈现出如项目展示部分中运算结果的显示效果
 
 
 
 ### ViewController.swift 控制器
 
 ViewController接收storyboad传递而来的事件（如点击buttom等），并依事件的发送者*sender*决定如何处理
+
+
 
 #### Outlets
 
@@ -50,6 +97,8 @@ Controller内有两个outlets用于对视图进行修改：
 ```
 
 `resultDisplay`绑定显示运算数或运算结果的`UILabel`，`radButtom`绑定横屏时的`Rad`按键
+
+
 
 #### viewDidLoad()
 
@@ -63,6 +112,8 @@ override func viewDidLoad() {
 }
 ```
 
+
+
 #### 与视图和calculator实例的交互
 
 ##### 数字
@@ -73,6 +124,8 @@ override func viewDidLoad() {
 var typingNow = false
 let calculator = Calculator()
 ```
+
+
 
 当按下数字类按键（0到9，小数点）时，方法`numberTouched()`对`resultDisplay.text`更新：
 
@@ -90,6 +143,8 @@ var typingNow = false
 ```
 
 可以看到`numberTouched`方法只会把`typingNow`置为`true`，将`typingNow`置为`false`的工作放在下面的方法`operatorTouched`中进行
+
+
 
 ##### 运算符
 
@@ -111,6 +166,8 @@ var typingNow = false
 
 当运算符被touch时，调用`Calculator`类的方法`performOperation`进行计算并得到运算结果，将结果更新到`resultDisplay`并修改`typingNow`表示结束数字输入
 
+
+
 一些特殊的运算符没有交给`Calculator`类处理，由`viewController`自身直接处理：
 
 ```swift
@@ -120,6 +177,8 @@ var typingNow = false
 ```
 
 点击`Rand`会显示一个`(0,1)`范围内的随机数
+
+
 
 ```swift
 @IBAction func radTouched(_ sender: UIButton) {
@@ -161,6 +220,8 @@ enum Operations {
 
 包含了一元运算、二元运算、等于运算、常数类型、存储操作
 
+
+
 定义了一个中间结果的结构用于运算：
 
 ```swift
@@ -171,11 +232,15 @@ struct Intermediate {
 var pendingOperation: Intermediate? = nil
 ```
 
+
+
 定义一个`Double memorizedResult`存储计算结果：
 
 ```swift
 var memorizedResult = 0.0
 ```
+
+
 
 定义了一个操作符的字典，以定义各个操作符的具体行为：
 
@@ -249,6 +314,8 @@ var operations = [
 ```
 
 此处的阶乘$x!$使用了比较无脑的方法，预先计算好结果在表示范围内的计算结果，超过表示范围则返回$-1$
+
+
 
 最后，提供一个`performOperation`方法以供`ViewController`调用：
 
